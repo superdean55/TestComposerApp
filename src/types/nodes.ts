@@ -17,9 +17,15 @@ export interface LayoutNode<T extends NodeType = NodeType> {
   children?: LayoutNode[];
 }
 export const components: {
-  [K in NodeType]: React.ComponentType<NodePropsMap[K]>;
+  [K in NodeType]: React.ComponentType<LayoutProps<K>>;
 } = {
   Page,
   Header,
   Content,
 };
+export interface LayoutProps<T extends NodeType> {
+  node: LayoutNode<T>;
+  onAdd: (parentId: string, newNode: LayoutNode | LayoutNode[]) => void;
+  selectedId: string | null;
+  setSelectedId: (id: string | null) => void;
+}

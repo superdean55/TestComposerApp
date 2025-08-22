@@ -1,6 +1,6 @@
 import type { LayoutNode } from "../../types/nodes";
 
-export const layoutTree : LayoutNode = {
+export const layoutTree: LayoutNode = {
   id: "page1",
   type: "Page",
   props: { text: "Page" },
@@ -25,4 +25,10 @@ export const layoutTree : LayoutNode = {
     },
     { id: "content1", type: "Content", props: { text: "Ovo je sadržaj." } },
   ],
+};
+export const layoutTree_: LayoutNode = {
+  id: "page1",
+  type: "Page",
+  props: { text: "Page" },
+  children: [],
 };

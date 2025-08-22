@@ -3,12 +3,12 @@ import { propEditors, type EditorProps } from "./types/editorProps";
 
 import { createTheme, Divider, ThemeProvider } from "@mui/material";
 import {
-  components,
   type LayoutNode,
   type NodePropsMap,
   type NodeType,
 } from "./types/nodes";
-import { layoutTree } from "./data/local/layout";
+import { layoutTree_ } from "./data/local/layout";
+import { renderNode } from "./shared/renderNode";
 
 const darkTheme = createTheme({
   palette: {
@@ -17,7 +17,7 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [layout, setLayout] = useState<LayoutNode>(layoutTree);
+  const [layout, setLayout] = useState<LayoutNode>(layoutTree_);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -33,33 +33,6 @@ function App() {
     return null;
   }
 
-  function renderFromJson<T extends NodeType>(
-    node: LayoutNode<T>
-  ): React.ReactNode {
-    const Comp = components[node.type] as React.ElementType;
-    if (!Comp) return null;
-
-    return (
-      <div
-        style={{
-          border:
-            node.id === selectedId ? "1px solid red" : "1px solid transparent",
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          setSelectedId(node.id);
-        }}
-      >
-        <Comp {...node.props}>
-          {node.children?.map((child) => (
-            <React.Fragment key={child.id}>
-              {renderFromJson(child as LayoutNode<typeof child.type>)}
-            </React.Fragment>
-          ))}
-        </Comp>
-      </div>
-    );
-  }
   function updateNode<T extends NodeType>(
     node: LayoutNode<T>,
     targetId: string,
@@ -89,30 +62,30 @@ function App() {
     setLayout((prev) => updateNode(prev, selectedId, { [key]: value }));
   }
 
-  /*function addChildNode(parentId: string, newNode: LayoutNode) {
+  const addChildNode = (
+    parentId: string,
+    newNodes: LayoutNode | LayoutNode[]
+  ) => {
     function helper(node: LayoutNode): LayoutNode {
       if (node.id === parentId) {
-        return {
-          ...node,
-          children: [...(node.children ?? []), newNode],
-        };
+        const nodesToAdd = Array.isArray(newNodes) ? newNodes : [newNodes];
+        return { ...node, children: [...(node.children ?? []), ...nodesToAdd] };
       }
-
-      return {
-        ...node,
-        children: node.children?.map(helper),
-      };
+      return { ...node, children: node.children?.map(helper) };
     }
 
-    setLayout((prev) => helper(prev));
-  }
-  */
+    setLayout((prev) => {
+      const updatedLayout = helper(prev);
+      console.log("Updated layout:", JSON.stringify(updatedLayout, null, 2));
+      return updatedLayout;
+    });
+  };
 
   return (
     <div className="flex flex-row gap-4">
       <div style={{ flex: 1 }}>
         <h2>Layout</h2>
-        {renderFromJson(layout)}
+        {renderNode(layout, addChildNode, selectedId, setSelectedId)}
       </div>
 
       <div className="w-sm">
