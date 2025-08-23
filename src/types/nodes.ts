@@ -1,13 +1,22 @@
 import { type ContentProps, Content } from "../components/layout/Content";
+import { type DividerProps, Divider } from "../components/layout/Divider";
 import { type HeaderProps, Header } from "../components/layout/Header";
+import { type HorizontalLayoutProps, HorizontalLayout } from "../components/layout/HorizontalLayout";
 import { type PageProps, Page } from "../components/layout/Page";
 
-export type NodeType = "Page" | "Header" | "Content";
+export type NodeType =
+  | "Page"
+  | "Header"
+  | "Content"
+  | "Divider"
+  | "HorizontalLayout";
 
 export type NodePropsMap = {
   Page: PageProps;
   Header: HeaderProps;
+  Divider: DividerProps;
   Content: ContentProps;
+  HorizontalLayout: HorizontalLayoutProps;
 };
 
 export interface LayoutNode<T extends NodeType = NodeType> {
@@ -22,6 +31,8 @@ export const components: {
   Page,
   Header,
   Content,
+  Divider,
+  HorizontalLayout,
 };
 export interface LayoutProps<T extends NodeType> {
   node: LayoutNode<T>;

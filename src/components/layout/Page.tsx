@@ -16,22 +16,42 @@ export const Page = ({
     const newHeaders: LayoutNode[] = [
       {
         id: crypto.randomUUID(),
-        type: "Header",
+        type: "HorizontalLayout",
         props: {
-          text: "Header",
-          height: 200,
-          padding: 10,
-          margin: { top: 5, right: 5, bottom: 5, left: 5 },
+          height: 500,
+          headerHeight: 200,
+          dividerHeight: 16,
         },
-        children: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        type: "Content",
-        props: {
-          text: "Some content",
-        },
-        children: [],
+        children: [
+          {
+            id: crypto.randomUUID(),
+            type: "Header",
+            props: {
+              text: "Header",
+              height: 200,
+              padding: 10,
+              margin: { top: 5, right: 5, bottom: 5, left: 5 },
+            },
+            children: [],
+          },
+          {
+            id: crypto.randomUUID(),
+            type: "Divider",
+            props: {
+              height: 16,
+            },
+            children: [],
+          },
+          {
+            id: crypto.randomUUID(),
+            type: "Content",
+            props: {
+              height: 50,
+              text: "Some content",
+            },
+            children: [],
+          },
+        ],
       },
     ];
     onAdd(node.id, newHeaders);
@@ -39,7 +59,7 @@ export const Page = ({
 
   const hasChildren = node.children && node.children.length > 0;
   return (
-    <div className="w-full flex flex-col border border-gray-300">
+    <div className="w-full flex flex-col border border-gray-300 h-[800px]">
       <div className="w-full flex flex-row justify-center">
         <h2>{node.props.text}</h2>
       </div>

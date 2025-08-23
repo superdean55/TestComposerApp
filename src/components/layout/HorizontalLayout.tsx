@@ -1,7 +1,9 @@
 import React from "react";
-import { Header } from "./Header";
-import { Divider } from "@mui/material";
-import { Content } from "./Content";
+import { type ContentProps } from "./Content";
+import { type LayoutProps } from "../../types/nodes";
+import { renderNode } from "../../shared/renderNode";
+import { type DividerProps } from "./Divider";
+import { type HeaderProps } from "./Header";
 
 export interface HorizontalLayoutProps {
   height: number;
@@ -10,37 +12,51 @@ export interface HorizontalLayoutProps {
   children?: React.ReactNode;
 }
 export const HorizontalLayout = ({
-  height,
-  headerHeight,
-  dividerHeight,
-  children,
-}: HorizontalLayoutProps) => {
-  const contentHeight = height - headerHeight - dividerHeight;
-
-  const mappedChildren = React.Children.map(children, (child) => {
-    if (!React.isValidElement(child)) return child;
-
-    // TypeScript ne zna propse djeteta, zato koristimo as React.ReactElement<any>
-    const element = child as React.ReactElement<any>;
-
-    // Dodaj height prema tipu komponente
-    if (element.type === Header) {
-      return React.cloneElement(element, { height: headerHeight });
-    }
-    if (element.type === Divider) {
-      return React.cloneElement(element, { height: dividerHeight });
-    }
-    if (element.type === Content) {
-      return React.cloneElement(element, { height: contentHeight });
-    }
-
-    return element;
-  });
+  node,
+  onAdd,
+  selectedId,
+  setSelectedId,
+}: LayoutProps<"HorizontalLayout">) => {
+  const contentHeight =
+    node.props.height - node.props.headerHeight - node.props.dividerHeight - 6;
 
   return (
     <>
-      <div className="w-full flex flex-col" style={{ height: height }}>
-        {mappedChildren}
+      <div
+        className="w-full flex flex-col"
+        style={{ height: node.props.height }}
+      >
+        {node.children?.map((child) => {
+          let adjustedChild = child;
+
+          if (child.type === "Header") {
+            adjustedChild = {
+              ...child,
+              props: {
+                ...(child.props as HeaderProps), // ili as HeaderProps
+                height: node.props.headerHeight,
+              },
+            };
+          } else if (child.type === "Divider") {
+            adjustedChild = {
+              ...child,
+              props: {
+                ...(child.props as DividerProps), // ili as DividerProps
+                height: node.props.dividerHeight,
+              },
+            };
+          } else if (child.type === "Content") {
+            adjustedChild = {
+              ...child,
+              props: {
+                ...(child.props as ContentProps), // ili as ContentProps
+                height: contentHeight,
+              },
+            };
+          }
+
+          return renderNode(adjustedChild, onAdd, selectedId, setSelectedId);
+        })}
       </div>
     </>
   );

@@ -1,11 +1,25 @@
-interface DividerProps {
+import { renderNode } from "../../shared/renderNode";
+import type { LayoutProps } from "../../types/nodes";
+
+export interface DividerProps {
   height: number;
 }
-export const Divider = ({ height }: DividerProps) => {
+export const Divider = ({
+  node,
+  onAdd,
+  selectedId,
+  setSelectedId,
+}: LayoutProps<"Divider">) => {
   return (
     <>
-      <div className="w-full flex flex-row" style={{ height: `${height}px` }}>
+      <div
+        className="w-full flex flex-row items-center"
+        style={{ height: `${node.props.height}px` }}
+      >
         <div className="w-full h-0.5 bg-black"></div>
+        {node.children?.map((child) =>
+          renderNode(child, onAdd, selectedId, setSelectedId)
+        )}
       </div>
     </>
   );

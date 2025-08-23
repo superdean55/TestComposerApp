@@ -3,6 +3,7 @@ import { renderNode } from "../../shared/renderNode";
 
 export interface ContentProps {
   text: string;
+  height: number;
   children?: React.ReactNode;
 }
 export const Content = ({
@@ -12,7 +13,7 @@ export const Content = ({
   setSelectedId,
 }: LayoutProps<"Content">) => {
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col" style={{ height: `${node.props.height}px`}}>
       <p>{node.props.text}</p>
       {/* render child node-ove */}
       {node.children?.map((child) =>
