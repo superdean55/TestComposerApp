@@ -82,9 +82,8 @@ function App() {
   };
 
   return (
-    <div className="flex flex-row gap-4">
-      <div style={{ flex: 1 }}>
-        <h2>Layout</h2>
+    <div className="grid grid-cols-[1fr_auto] gap-4 p-5">
+      <div className="flex flex-row justify-center">
         {renderNode(layout, addChildNode, selectedId, setSelectedId)}
       </div>
 
@@ -113,8 +112,10 @@ function App() {
                   return (
                     <div key={String(key)} style={{ marginBottom: "10px" }}>
                       <Editor
-                        value={value}
-                        onChange={(val: PropType) => handlePropChange(key, val)}
+                        value={value as unknown as PropType}
+                        onChange={(val) =>
+                          handlePropChange(key, val as PropType)
+                        }
                       />
                       <Divider />
                     </div>

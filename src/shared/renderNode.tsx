@@ -8,16 +8,9 @@ export function renderNode<T extends NodeType>(
 ): React.ReactNode {
   const Comp = components[node.type] as React.ElementType;
   if (!Comp) return null;
-  const isSelected = node.id === selectedId;
+  
   return (
-    <div
-      key={node.id}
-      style={{ border: isSelected ? "1px solid red" : "1px solid transparent" }}
-      onClick={(e) => {
-        e.stopPropagation();
-        setSelectedId(node.id);
-      }}
-    >
+    
       <Comp
         node={node}
         onAdd={onAdd}
@@ -28,6 +21,6 @@ export function renderNode<T extends NodeType>(
           renderNode(child, onAdd, selectedId, setSelectedId)
         )}
       </Comp>
-    </div>
+    
   );
 }

@@ -1,9 +1,12 @@
 import type { LayoutNode, LayoutProps } from "../../types/nodes";
 import { renderNode } from "../../shared/renderNode";
+import PreviewDialog from "../../shared/PreviewDialog";
+import { useState } from "react";
+import { HorizontalLayoutPreview } from "./HorizontalLayout";
+import { NodeWrapper } from "../../shared/NodeWrapper";
 
 export interface PageProps {
   text: string;
-  children?: React.ReactNode;
 }
 
 export const Page = ({
@@ -12,68 +15,39 @@ export const Page = ({
   selectedId,
   setSelectedId,
 }: LayoutProps<"Page"> & { children?: React.ReactNode }) => {
-  const handleAddHeaders = () => {
-    const newHeaders: LayoutNode[] = [
-      {
-        id: crypto.randomUUID(),
-        type: "HorizontalLayout",
-        props: {
-          height: 500,
-          headerHeight: 200,
-          dividerHeight: 16,
-        },
-        children: [
-          {
-            id: crypto.randomUUID(),
-            type: "Header",
-            props: {
-              text: "Header",
-              height: 200,
-              padding: 10,
-              margin: { top: 5, right: 5, bottom: 5, left: 5 },
-            },
-            children: [],
-          },
-          {
-            id: crypto.randomUUID(),
-            type: "Divider",
-            props: {
-              height: 16,
-            },
-            children: [],
-          },
-          {
-            id: crypto.randomUUID(),
-            type: "Content",
-            props: {
-              height: 50,
-              text: "Some content",
-            },
-            children: [],
-          },
-        ],
-      },
-    ];
-    onAdd(node.id, newHeaders);
+  const [open, setOpen] = useState(false);
+  const handleAddHeaders = (newNodes: LayoutNode[]) => {
+    setOpen(false);
+    onAdd(node.id, newNodes);
   };
 
   const hasChildren = node.children && node.children.length > 0;
+  
   return (
-    <div className="w-full flex flex-col border border-gray-300 h-[800px]">
-      <div className="w-full flex flex-row justify-center">
-        <h2>{node.props.text}</h2>
-      </div>
-      {!hasChildren && (
-        <button
-          className="my-2 px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={handleAddHeaders}
+    <NodeWrapper nodeId={node.id} selectedId={selectedId} setSelectedId={setSelectedId}>
+      <div className="w-[794px] flex flex-col border border-gray-300 h-[1123px] bg-white">
+        <div className="w-full flex flex-row justify-center">
+          <h2>{node.props.text}</h2>
+        </div>
+        {!hasChildren && (
+          <button
+            className="my-2 px-4 py-2 bg-blue-500 text-white rounded"
+            onClick={() => setOpen(true)}
+          >
+            Add layout
+          </button>
+        )}
+        <PreviewDialog
+          title="Choose layout configuration"
+          open={open}
+          onClose={() => setOpen(false)}
         >
-          Add layout
-        </button>
-      )}
-      {node.children?.map((child) =>
-        renderNode(child, onAdd, selectedId, setSelectedId)
-      )}
-    </div>
+          <HorizontalLayoutPreview onClick={handleAddHeaders} />
+        </PreviewDialog>
+        {node.children?.map((child) =>
+          renderNode(child, onAdd, selectedId, setSelectedId)
+        )}
+      </div>
+    </NodeWrapper>
   );
 };
