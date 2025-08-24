@@ -2,8 +2,8 @@ import type { LayoutNode, LayoutProps } from "../../types/nodes";
 import { renderNode } from "../../shared/renderNode";
 import PreviewDialog from "../../shared/PreviewDialog";
 import { useState } from "react";
-import { HorizontalLayoutPreview } from "./HorizontalLayout";
 import { NodeWrapper } from "../../shared/NodeWrapper";
+import { PreviewContent } from "../../shared/PreviewContent";
 
 export interface PageProps {
   text: string;
@@ -22,9 +22,13 @@ export const Page = ({
   };
 
   const hasChildren = node.children && node.children.length > 0;
-  
+
   return (
-    <NodeWrapper nodeId={node.id} selectedId={selectedId} setSelectedId={setSelectedId}>
+    <NodeWrapper
+      nodeId={node.id}
+      selectedId={selectedId}
+      setSelectedId={setSelectedId}
+    >
       <div className="w-[794px] flex flex-col border border-gray-300 h-[1123px] bg-white">
         <div className="w-full flex flex-row justify-center">
           <h2>{node.props.text}</h2>
@@ -42,7 +46,10 @@ export const Page = ({
           open={open}
           onClose={() => setOpen(false)}
         >
-          <HorizontalLayoutPreview onClick={handleAddHeaders} />
+          <PreviewContent
+            nodeType="layout"
+            onSelect={handleAddHeaders}
+          ></PreviewContent>
         </PreviewDialog>
         {node.children?.map((child) =>
           renderNode(child, onAdd, selectedId, setSelectedId)
