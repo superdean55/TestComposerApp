@@ -8,7 +8,6 @@ export interface ContentProps {
 }
 export const Content = ({
   node,
-  onAdd,
   selectedId,
   setSelectedId,
 }: LayoutProps<"Content">) => {
@@ -18,7 +17,7 @@ export const Content = ({
         <p className="text-black">{node.props.text}</p>
         {/* render child node-ove */}
         {node.children?.map((child) =>
-          renderNode(child, onAdd, selectedId, setSelectedId)
+          renderNode(child, selectedId, setSelectedId)
         )}
       </div>
     </NodeWrapper>

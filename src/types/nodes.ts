@@ -1,7 +1,11 @@
 import { type ContentProps, Content } from "../components/layout/Content";
+import { type DescriptionProps, Description } from "../components/layout/Description";
 import { type DividerProps, Divider } from "../components/layout/Divider";
 import { type HeaderProps, Header } from "../components/layout/Header";
-import { type HorizontalLayoutProps, HorizontalLayout } from "../components/layout/HorizontalLayout";
+import {
+  type HorizontalLayoutProps,
+  HorizontalLayout,
+} from "../components/layout/HorizontalLayout";
 import { type PageProps, Page } from "../components/layout/Page";
 
 export type NodeType =
@@ -9,7 +13,8 @@ export type NodeType =
   | "Header"
   | "Content"
   | "Divider"
-  | "HorizontalLayout";
+  | "HorizontalLayout"
+  | "Description";
 
 export type NodePropsMap = {
   Page: PageProps;
@@ -17,6 +22,7 @@ export type NodePropsMap = {
   Divider: DividerProps;
   Content: ContentProps;
   HorizontalLayout: HorizontalLayoutProps;
+  Description: DescriptionProps;
 };
 
 export interface LayoutNode<T extends NodeType = NodeType> {
@@ -33,10 +39,10 @@ export const components: {
   Content,
   Divider,
   HorizontalLayout,
+  Description
 };
 export interface LayoutProps<T extends NodeType> {
   node: LayoutNode<T>;
-  onAdd: (parentId: string, newNode: LayoutNode | LayoutNode[]) => void;
   selectedId: string | null;
   setSelectedId: (id: string | null) => void;
 }

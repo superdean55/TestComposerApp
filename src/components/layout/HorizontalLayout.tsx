@@ -11,7 +11,6 @@ export interface HorizontalLayoutProps {
 }
 export const HorizontalLayout = ({
   node,
-  onAdd,
   selectedId,
   setSelectedId,
 }: LayoutProps<"HorizontalLayout">) => {
@@ -43,7 +42,7 @@ export const HorizontalLayout = ({
                 },
               };
             } 
-            return renderNode(adjustedChild, onAdd, selectedId, setSelectedId);
+            return renderNode(adjustedChild, selectedId, setSelectedId);
           })}
         </div>
       </NodeWrapper>

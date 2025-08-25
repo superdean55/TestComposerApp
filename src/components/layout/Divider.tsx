@@ -7,7 +7,6 @@ export interface DividerProps {
 }
 export const Divider = ({
   node,
-  onAdd,
   selectedId,
   setSelectedId,
 }: LayoutProps<"Divider">) => {
@@ -20,7 +19,7 @@ export const Divider = ({
         >
           <div className="w-full h-0.5 bg-black"></div>
           {node.children?.map((child) =>
-            renderNode(child, onAdd, selectedId, setSelectedId)
+            renderNode(child, selectedId, setSelectedId)
           )}
         </div>
       </NodeWrapper>

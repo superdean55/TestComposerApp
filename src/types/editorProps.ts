@@ -7,12 +7,7 @@ export interface EditorProps<T> {
   value: T;
   onChange: (newValue: T) => void;
 }
-/*export type PropEditorMap = {
-  text: React.FC<EditorProps<string>>;
-  padding: React.FC<EditorProps<number>>;
-  margin: React.FC<EditorProps<Margin>>;
-  // možeš dodati ostale propse
-};*/
+
 type PropEditorMap = {
   padding: typeof PaddingEditor;
   text: typeof TextEditor;

@@ -18,10 +18,12 @@ export const NodeWrapper = ({
   return (
     <>
       <div
+        className="w-full flex"
+        key={nodeId}
         style={{
-          display: "inline-block",
           border: isSelected ? "1px solid red" : "1px solid transparent",
           height: height ? `${height}` : `auto`,
+          backgroundColor: isSelected ? "rgba(0,0,0,0.4)" : "transparent",
         }}
         onClick={(e) => {
           e.stopPropagation();

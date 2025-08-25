@@ -11,7 +11,6 @@ export interface HeaderProps {
 }
 export const Header = ({
   node,
-  onAdd,
   selectedId,
   setSelectedId,
 }: LayoutProps<"Header">) => {
@@ -30,7 +29,7 @@ export const Header = ({
         </h3>
         {/* render child node-ove */}
         {node.children?.map((child) =>
-          renderNode(child, onAdd, selectedId, setSelectedId)
+          renderNode(child, selectedId, setSelectedId)
         )}
       </div>
     </NodeWrapper>

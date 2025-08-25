@@ -9,6 +9,7 @@ import {
 } from "./types/nodes";
 import { layoutTree_ } from "./data/local/layout";
 import { renderNode } from "./shared/renderNode";
+import { NodeControls } from "./components/controlPanel/NodeControls";
 
 const darkTheme = createTheme({
   palette: {
@@ -80,11 +81,38 @@ function App() {
       return updatedLayout;
     });
   };
+  const removeNode = (parentId: string) => {
+    function helper(node: LayoutNode): LayoutNode {
+      if (node.id === parentId) {
+        return { ...node, children: [] };
+      }
+
+      return {
+        ...node,
+        children: node.children?.map(helper) ?? [],
+      };
+    }
+
+    setLayout((prev) => {
+      const updatedLayout = helper(prev);
+      console.log(
+        "Updated layout after remove:",
+        JSON.stringify(updatedLayout, null, 2)
+      );
+      return updatedLayout;
+    });
+  };
 
   return (
     <div className="grid grid-cols-[1fr_auto] gap-4 p-5">
       <div className="flex flex-row justify-center">
-        {renderNode(layout, addChildNode, selectedId, setSelectedId)}
+        <div className="inline-block">
+          {renderNode(
+            layout,
+            selectedId,
+            setSelectedId
+          )}
+        </div>
       </div>
 
       <div className="w-sm">
@@ -95,6 +123,9 @@ function App() {
             </div>
             {selectedNode ? (
               <div className="flex flex-col gap-2">
+                <Divider />
+                <NodeControls node={selectedNode}  onAdd={addChildNode} onRemove={removeNode} />
+                <Divider />
                 {(
                   Object.keys(selectedNode.props) as Array<
                     keyof typeof selectedNode.props
@@ -124,7 +155,7 @@ function App() {
               </div>
             ) : (
               <div className="w-full flex flex-row justify-center">
-                <p>Odaberi komponentu</p>
+                <p className="text-white">Select component</p>
               </div>
             )}
           </ThemeProvider>
